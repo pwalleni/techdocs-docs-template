@@ -3,11 +3,11 @@ kind: Template
 # some metadata about the template itself
 metadata:
   name: v1beta3-demo
-  title: Test Action template
-  description: scaffolder v1beta3 template demo
+  title: Techdocs Microsite
+  description: Create a documentation site only
 spec:
-  owner: backstage/techdocs-core
-  type: service
+  owner: user:pwalleni
+  type: website
 
   # these are the steps which are rendered in the frontend with the form input
   parameters:
