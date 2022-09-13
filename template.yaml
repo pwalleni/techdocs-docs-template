@@ -4,7 +4,7 @@ kind: Template
 metadata:
   name: v1beta3-demo
   title: Techdocs Microsite
-  description: Create a documentation site only
+  description: Create a documentation site only, hosted in pwalleni GitHub user account
 spec:
   owner: user:pwalleni
   type: library
