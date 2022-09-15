@@ -1,27 +1,33 @@
 apiVersion: scaffolder.backstage.io/v1beta3
 kind: Template
-# some metadata about the template itself
 metadata:
-  name: v1beta3-demo
-  title: Techdocs Microsite
-  description: Create a documentation site only, hosted in pwalleni GitHub user account
+  name: docs-template
+  title: Volvo Cars Digital Core Documentation Template
+  description: Create a new standalone documentation project
+  tags:
+    - recommended
+    - techdocs
+    - mkdocs
 spec:
-  owner: user:pwalleni
-  type: library
+  owner: backstage/techdocs-core
+  type: documentation
 
-  # these are the steps which are rendered in the frontend with the form input
   parameters:
     - title: Fill in some steps
       required:
         - name
+        - description
       properties:
         name:
           title: Name
           type: string
           description: Unique name of the component
+          ui:field: EntityNamePicker
           ui:autofocus: true
-          ui:options:
-            rows: 5
+        description:
+          title: Description
+          type: string
+          description: A description for the component
         owner:
           title: Owner
           type: string
@@ -29,7 +35,7 @@ spec:
           ui:field: OwnerPicker
           ui:options:
             allowedKinds:
-              - User
+              - Group
     - title: Choose a location
       required:
         - repoUrl
@@ -41,31 +47,24 @@ spec:
           ui:options:
             allowedHosts:
               - github.com
-            allowedOwners:
-              - pwalleni
 
-  # here's the steps that are executed in series in the scaffolder backend
   steps:
-    - id: fetch-base
-      name: Fetch Base
+    - id: fetch
+      name: Template Docs Skeleton
       action: fetch:template
       input:
         url: ./template
         values:
           name: ${{ parameters.name }}
-
-    - id: fetch-docs
-      name: Fetch Docs
-      action: fetch:plain
-      input:
-        targetPath: ./community
-        url: https://github.com/backstage/community/tree/main/backstage-community-sessions
+          description: ${{ parameters.description }}
+          destination: ${{ parameters.repoUrl | parseRepoUrl }}
+          owner: ${{ parameters.owner }}
 
     - id: publish
       name: Publish
       action: publish:github
       input:
-        allowedHosts: ['github.com']
+        allowedHosts: ["github.com"]
         description: This is ${{ parameters.name }}
         repoUrl: ${{ parameters.repoUrl }}
 
@@ -74,4 +73,12 @@ spec:
       action: catalog:register
       input:
         repoContentsUrl: ${{ steps.publish.output.repoContentsUrl }}
-        catalogInfoPath: '/catalog-info.yaml'
+        catalogInfoPath: "/catalog-info.yaml"
+
+  output:
+    links:
+      - title: Repository
+        url: ${{ steps.publish.output.remoteUrl }}
+      - title: Open in catalog
+        icon: catalog
+        entityRef: ${{ steps.register.output.entityRef }}
