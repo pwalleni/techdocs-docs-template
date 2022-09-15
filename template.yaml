@@ -35,7 +35,7 @@ spec:
           ui:field: OwnerPicker
           ui:options:
             allowedKinds:
-              - Group
+              - User
     - title: Choose a location
       required:
         - repoUrl
@@ -48,7 +48,7 @@ spec:
             allowedHosts:
               - github.com
             allowedOwners:
-              - pwalleni
+             - pwalleni
 
   steps:
     - id: fetch
