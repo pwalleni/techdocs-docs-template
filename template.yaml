@@ -47,6 +47,8 @@ spec:
           ui:options:
             allowedHosts:
               - github.com
+            allowedOwners:
+              - pwalleni
 
   steps:
     - id: fetch
